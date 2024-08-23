@@ -1,3 +1,2 @@
 # Auto detect text files and perform LF normalization
 * text=auto
-ms-bert-win-1.0.1.zip filter=lfs diff=lfs merge=lfs -text

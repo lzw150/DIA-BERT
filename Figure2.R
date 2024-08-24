@@ -141,34 +141,3 @@ LFQPlot_sper(data=DIANN_prs_HYC_GUI1,title='',type='HYC', pdf1=paste0(pathMS_BER
 LFQPlot_sper(data=DIANN_pgs_HYC_GUI1,title='',type='HYC', pdf1=paste0(pathMS_BERT_HYC_GUI,'DIANN_pgs_HYC_GUI1'),xlim1=14,xlim2=33)
 LFQbox(data=DIANN_prs_HYC_GUI1,title='DIANN_prs',type='HYC', c(-10, 10))
 LFQbox(data=DIANN_pgs_HYC_GUI1,title='DIANN_pgs',type='HYC', c(-10, 10))
-
-
-#Protein comparison
-commp_HYC_GUI=intersect(rownames(pgs1_ori_HYC_GUI), rownames(DIANN_pgs_HYC_GUI1))
-pesp_HYC_GUI = sapply(5:0, function(x){
-  cor.test(log2(unlist(pgs1_ori_HYC_GUI[commp_HYC_GUI, ncol(pgs1_ori_HYC_GUI)-x])), 
-           log2(unlist(DIANN_pgs_HYC_GUI1[commp_HYC_GUI, ncol(DIANN_pgs_HYC_GUI1)-x])), 
-           method='pearson', use='pairwise.complete.obs')$estimate
-})
-names(pesp_HYC_GUI) = colnames(pgs1_ori_HYC_GUI[ncol(pgs1_ori_HYC_GUI)-c(5:0)])
-mean(pesp_HYC_GUI) #0.9456043
-
-####precursor_ori comparison
-comm_HYC_GUI=intersect(gsub('^_','',rownames(prs1_ori_HYC_GUI)), rownames(DIANN_prs_HYC_GUI1))
-pes_HYC_GUI = sapply(5:0, function(x){
-  cor.test(log2(unlist(prs1_ori_HYC_GUI[comm_HYC_GUI, ncol(prs1_ori_HYC_GUI)-x])), 
-           log2(unlist(DIANN_prs_HYC_GUI1[comm_HYC_GUI, ncol(DIANN_prs_HYC_GUI1)-x])), method='pearson')$estimate
-})
-names(pes_HYC_GUI) = colnames(prs1_ori_HYC_GUI[ncol(prs1_ori_HYC_GUI)-c(5:0)])
-mean(pes_HYC_GUI) #0.7885133
-
-###
-###MS-BERT 
-cclat(prs1_ori_HYC_GUI[comm_HYC_GUI,])
-cclat(pgs1_ori_HYC_GUI[commp_HYC_GUI,])
-
-###DIANN
-cclat(DIANN_prs_HYC_GUI1[comm_HYC_GUI,])
-cclat(DIANN_pgs_HYC_GUI1[commp_HYC_GUI,])
-
-

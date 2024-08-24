@@ -25,7 +25,7 @@ LFQPlot_sper <- function(data, title, type='HYC', pdf1='',xlim1,xlim2){
     scale_color_viridis(option = "B",direction = -1,begin=0,end=0.8,alpha = 0.3,discrete = F) + 
     geom_hline(yintercept=log2(2),color=c('orange'))+
     labs(tag = title, title = 'YEAST') +
-    ylim(-10,10) +
+    ylim(-5,5) +
     xlim(xlim1,xlim2) +
     theme_classic()
   
@@ -34,7 +34,7 @@ LFQPlot_sper <- function(data, title, type='HYC', pdf1='',xlim1,xlim2){
     scale_color_viridis(option = "D",direction = -1,begin=0,end=0.8,alpha = 0.3) + 
     geom_hline(yintercept=log2(1),color=c('green'))+
     labs(tag = title, title = 'HUMAN') +
-    ylim(-10,10) +
+    ylim(-5,5) +
     xlim(xlim1,xlim2) +
     theme_classic()
   
@@ -43,7 +43,7 @@ LFQPlot_sper <- function(data, title, type='HYC', pdf1='',xlim1,xlim2){
     scale_color_viridis(option = "G",direction = -1,begin=0,end=0.8,alpha = 0.3) + 
     geom_hline(yintercept=log2(1/1.3),color=c('skyblue'))+
     labs(tag = title, title = 'CAEEL') +
-    ylim(-10,10) +
+    ylim(-5,5) +
     xlim(xlim1,xlim2) +
     theme_classic()
   if(pdf1==''){
@@ -139,5 +139,7 @@ cclat(DIANN_pgs_HYC_GUI1)
 ###plot for DIANN 
 LFQPlot_sper(data=DIANN_prs_HYC_GUI1,title='',type='HYC', pdf1=paste0(pathMS_BERT_HYC_GUI,'DIANN_prs_HYC_GUI1'),xlim1=14,xlim2=33)
 LFQPlot_sper(data=DIANN_pgs_HYC_GUI1,title='',type='HYC', pdf1=paste0(pathMS_BERT_HYC_GUI,'DIANN_pgs_HYC_GUI1'),xlim1=14,xlim2=33)
-LFQbox(data=DIANN_prs_HYC_GUI1,title='DIANN_prs',type='HYC', c(-10, 10))
-LFQbox(data=DIANN_pgs_HYC_GUI1,title='DIANN_pgs',type='HYC', c(-10, 10))
+pdf('D:/LZW/Guomics/MS-BERT/Benchmark/fdrs_DIANN19/Boxplot_HYC_DIANN.pdf', width = 5, height = 5)
+LFQbox(data=DIANN_prs_HYC_GUI1,title='DIANN_prs',type='HYC', c(-5, 5))
+LFQbox(data=DIANN_pgs_HYC_GUI1,title='DIANN_pgs',type='HYC', c(-5, 5))
+dev.off()

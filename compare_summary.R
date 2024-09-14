@@ -1,9 +1,9 @@
-path='D:/LZW/Guomics/MS-BERT/Benchmark/fdrs_DIANN19/'
+path='D:/LZW/Guomics/DIA-BERT/Benchmark/fdrs_DIANN19/'
 setwd(path)
-#MS-BERT
+#DIA-BERT
 Fdrcontrol <- function(dataset){
   #dataset='HYC_GUI';
-  S1='MS_BERT';
+  S1='DIA_BERT';
   ptr1='_quant_sum6_precursor_area_diann_combine.csv'
   S1prs=dir(paste0(path,S1,'/',dataset), paste0('(.*)',ptr1))
   if(length(S1prs)==0){
@@ -29,27 +29,27 @@ Fdrcontrol <- function(dataset){
   }
   res
 }
-MS_BERT_HYC_GUI <- Fdrcontrol('HYC_GUI')
-MS_BERT_Tumor15_IPX0001981000 <- Fdrcontrol('Tumor15_IPX0001981000')
-#output MS_BERT_Human_proteome
-MS_BERT_Human_proteome <- data.frame()
-for(i in names(MS_BERT_Tumor15_IPX0001981000)){
-  #i=names(MS_BERT_Tumor15_IPX0001981000)[1]
-  T1=MS_BERT_Tumor15_IPX0001981000[[i]][c('Precursor', 'Protein_id')]
+DIA_BERT_HYC_GUI <- Fdrcontrol('HYC_GUI')
+DIA_BERT_Tumor15_IPX0001981000 <- Fdrcontrol('Tumor15_IPX0001981000')
+#output DIA_BERT_Human_proteome
+DIA_BERT_Human_proteome <- data.frame()
+for(i in names(DIA_BERT_Tumor15_IPX0001981000)){
+  #i=names(DIA_BERT_Tumor15_IPX0001981000)[1]
+  T1=DIA_BERT_Tumor15_IPX0001981000[[i]][c('Precursor', 'Protein_id')]
   T1$Filename=i
   T1$Dataset='Human_tissue'
-  MS_BERT_Human_proteome=rbind(MS_BERT_Human_proteome,T1)
+  DIA_BERT_Human_proteome=rbind(DIA_BERT_Human_proteome,T1)
 }
-#output MS_BERT_3_species_proteome
-MS_BERT_3_species_proteome <- data.frame()
-for(i in names(MS_BERT_HYC_GUI)){
-  #i=names(MS_BERT_HYC_GUI)[1]
-  T1=MS_BERT_HYC_GUI[[i]][c('Precursor', 'Protein_id')]
+#output DIA_BERT_3_species_proteome
+DIA_BERT_3_species_proteome <- data.frame()
+for(i in names(DIA_BERT_HYC_GUI)){
+  #i=names(DIA_BERT_HYC_GUI)[1]
+  T1=DIA_BERT_HYC_GUI[[i]][c('Precursor', 'Protein_id')]
   T1$Filename=i
   T1$Dataset='HYC'
-  MS_BERT_3_species_proteome=rbind(MS_BERT_3_species_proteome,T1)
+  DIA_BERT_3_species_proteome=rbind(DIA_BERT_3_species_proteome,T1)
 }
-writexl::write_xlsx(list(Human_proteome=MS_BERT_Human_proteome,Three_species_proteome=MS_BERT_3_species_proteome),'MS_BERT_proteome.xlsx')
+writexl::write_xlsx(list(Human_proteome=DIA_BERT_Human_proteome,Three_species_proteome=DIA_BERT_3_species_proteome),'DIA_BERT_proteome.xlsx')
 
 #DIA-NN
 res_DIANN <- function(S1,dataset){
@@ -105,7 +105,7 @@ writexl::write_xlsx(list(Human_proteome=DIA_NN_19_lib_human_proteome,Three_speci
 
 #Overlap
 compare1 <- function(D1,D2,title){
-  #D1=MS_BERT_HYC_GUI;D2=DIA_NN_19_lib_HYC_GUI;title='MS_BERT_vs_DIA_NN_19_lib_human'
+  #D1=DIA_BERT_HYC_GUI;D2=DIA_NN_19_lib_HYC_GUI;title='DIA_BERT_vs_DIA_NN_19_lib_human'
   prs=t(sapply(names(D1),function(x){
     peps1=unique(D1[[x]]$Precursor)
     peps2=unique(D2[[x]]$Precursor)
@@ -124,9 +124,9 @@ compare1 <- function(D1,D2,title){
   res
 }
 
-MS_BERT_vs_DIA_NN_19_lib_HYC_GUI       = compare1(D1=MS_BERT_HYC_GUI,       D2=DIA_NN_19_lib_HYC_GUI,       title='1MS_BERT_vs_DIA_NN_19_lib_HYC_GUI')
-MS_BERT_vs_DIA_NN_19_lib_Tumor15_IPX0001981000         = compare1(D1=MS_BERT_Tumor15_IPX0001981000,         D2=DIA_NN_19_lib_Tumor15_IPX0001981000,         title='1MS_BERT_vs_DIA_NN_19_lib_Tumor15_IPX0001981000')
+DIA_BERT_vs_DIA_NN_19_lib_HYC_GUI       = compare1(D1=DIA_BERT_HYC_GUI,       D2=DIA_NN_19_lib_HYC_GUI,       title='1DIA_BERT_vs_DIA_NN_19_lib_HYC_GUI')
+DIA_BERT_vs_DIA_NN_19_lib_Tumor15_IPX0001981000         = compare1(D1=DIA_BERT_Tumor15_IPX0001981000,         D2=DIA_NN_19_lib_Tumor15_IPX0001981000,         title='1DIA_BERT_vs_DIA_NN_19_lib_Tumor15_IPX0001981000')
 
-MS_BERT_vs_DIA_NN_19_fas_HYC_GUI     = compare1(D1=MS_BERT_HYC_GUI, D2=DIA_NN_19_fas_HYC_GUI, title='1MS_BERT_vs_DIA_NN_19_fas_HYC_GUI')
-MS_BERT_vs_DIA_NN_19_fas_Tumor15_IPX0001981000       = compare1(D1=MS_BERT_Tumor15_IPX0001981000,   D2=DIA_NN_19_fas_Tumor15_IPX0001981000,   title='1MS_BERT_vs_DIA_NN_19_fas_Tumor15_IPX0001981000')
+DIA_BERT_vs_DIA_NN_19_fas_HYC_GUI     = compare1(D1=DIA_BERT_HYC_GUI, D2=DIA_NN_19_fas_HYC_GUI, title='1DIA_BERT_vs_DIA_NN_19_fas_HYC_GUI')
+DIA_BERT_vs_DIA_NN_19_fas_Tumor15_IPX0001981000       = compare1(D1=DIA_BERT_Tumor15_IPX0001981000,   D2=DIA_NN_19_fas_Tumor15_IPX0001981000,   title='1DIA_BERT_vs_DIA_NN_19_fas_Tumor15_IPX0001981000')
 

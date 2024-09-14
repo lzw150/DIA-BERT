@@ -1,12 +1,12 @@
-setwd('D:/LZW/Guomics/MS-BERT/Benchmark/fdrs_DIANN19')
+setwd('D:/LZW/Guomics/DIA-BERT/Benchmark/fdrs_DIANN19')
 library('cowplot')
 pgs=readxl::read_xlsx('Figure1.xlsx', sheet = 'pgs_lib')
-rks=sort(tapply(pgs$`MS-BERT`,factor(pgs$Disease),mean,na.rm=T),decreasing = T)
+rks=sort(tapply(pgs$`DIA-BERT`,factor(pgs$Disease),mean,na.rm=T),decreasing = T)
 rks_id=c()
 ct=1
 for(i in names(rks)){
   T1=pgs[pgs$Disease==i, ]
-  T2=T1[order(T1$`MS-BERT`, decreasing = T), ]
+  T2=T1[order(T1$`DIA-BERT`, decreasing = T), ]
   id=paste(ct, c(1:nrow(T2)),sep='_')
   names(id)=T2$Files
   rks_id=c(rks_id, id)
@@ -31,18 +31,18 @@ rownames(pgs_fas)=pgs_fas$Files
 pgs_fas=pgs_fas[rownames(pgs),]
 
 #pgs_Human_proteome
-pgs_Human_proteome=pgs[-c(1:6),c('DIA-NN', 'MS-BERT')]
+pgs_Human_proteome=pgs[-c(1:6),c('DIA-NN', 'DIA-BERT')]
 rownames(pgs_Human_proteome)=paste(pgs$rks_id[-c(1:6)], pgs$Disease[-c(1:6)], sep='_')
 
-pgs_fas_Human_proteome=pgs_fas[-c(1:6),c('DIA-NN', 'MS-BERT')]
+pgs_fas_Human_proteome=pgs_fas[-c(1:6),c('DIA-NN', 'DIA-BERT')]
 rownames(pgs_fas_Human_proteome)=rownames(pgs_Human_proteome)
 
 
 #prs_Human_proteome
-prs_Human_proteome=prs[-c(1:6),c('DIA-NN', 'MS-BERT')]
+prs_Human_proteome=prs[-c(1:6),c('DIA-NN', 'DIA-BERT')]
 rownames(prs_Human_proteome)=rownames(pgs_Human_proteome)
 
-prs_fas_Human_proteome=prs_fas[-c(1:6),c('DIA-NN', 'MS-BERT')]
+prs_fas_Human_proteome=prs_fas[-c(1:6),c('DIA-NN', 'DIA-BERT')]
 rownames(prs_fas_Human_proteome)=rownames(pgs_Human_proteome)
 
 
@@ -92,12 +92,12 @@ boxplot2 <- function(data,main,lab1="Common",lab2="Unique",ylab1="Log2intensity"
 T1=data.frame(var=gsub('(.*)_(.*)_(.*)','\\1_\\3',rownames(prs_Human_proteome)), 
               type='DIA-NN', quant=c(prs_Human_proteome$`DIA-NN`))
 T2=data.frame(var=gsub('(.*)_(.*)_(.*)','\\1_\\3',rownames(prs_Human_proteome)), 
-              type='MS-BERT', quant=c(prs_Human_proteome$`MS-BERT`))
+              type='DIA-BERT', quant=c(prs_Human_proteome$`DIA-BERT`))
 prs_Human_proteome_long=rbind(T1,T2)
 cat('ttest for precursor identification comparison\n')
 print(sapply(unique(prs_Human_proteome_long$var),function(x){
   #x=unique(prs_Human_proteome_long$var)[2]
-  t.test(c(prs_Human_proteome_long[prs_Human_proteome_long$var==x & prs_Human_proteome_long$type=='MS-BERT','quant']), 
+  t.test(c(prs_Human_proteome_long[prs_Human_proteome_long$var==x & prs_Human_proteome_long$type=='DIA-BERT','quant']), 
          c(prs_Human_proteome_long[prs_Human_proteome_long$var==x & prs_Human_proteome_long$type=='DIA-NN','quant']),paired = T)$p.value
 }))
 # 2_cervical cancer        3_gallbladder cancer                4_myosarcoma 5_pancreatic adenocarcinoma 
@@ -107,12 +107,12 @@ print(sapply(unique(prs_Human_proteome_long$var),function(x){
 T1=data.frame(var=gsub('(.*)_(.*)_(.*)','\\1_\\3',rownames(pgs_Human_proteome)), 
               type='DIA-NN', quant=c(pgs_Human_proteome$`DIA-NN`))
 T2=data.frame(var=gsub('(.*)_(.*)_(.*)','\\1_\\3',rownames(pgs_Human_proteome)), 
-              type='MS-BERT', quant=c(pgs_Human_proteome$`MS-BERT`))
+              type='DIA-BERT', quant=c(pgs_Human_proteome$`DIA-BERT`))
 pgs_Human_proteome_long=rbind(T1,T2)
 cat('ttest for protein identification comparison\n')
 print(sapply(unique(pgs_Human_proteome_long$var),function(x){
   #x=unique(pgs_Human_proteome_long$var)[2]
-  t.test(c(pgs_Human_proteome_long[pgs_Human_proteome_long$var==x & pgs_Human_proteome_long$type=='MS-BERT','quant']), 
+  t.test(c(pgs_Human_proteome_long[pgs_Human_proteome_long$var==x & pgs_Human_proteome_long$type=='DIA-BERT','quant']), 
          c(pgs_Human_proteome_long[pgs_Human_proteome_long$var==x & pgs_Human_proteome_long$type=='DIA-NN','quant']),paired = T)$p.value
 }))
 #  2_cervical cancer        3_gallbladder cancer                4_myosarcoma 5_pancreatic adenocarcinoma 
@@ -122,8 +122,8 @@ print(sapply(unique(pgs_Human_proteome_long$var),function(x){
 
 #boxplot precursor and protein number for tissue
 pdf('Boxplot precursor and protein number for tissue.pdf', width=5,height = 4)
-boxplot2(prs_Human_proteome_long, main="Human proteome (precursors)",lab1='DIA-NN',lab2='MS-BERT',ylab1='Number of precursors',ylim1=c(0,80000))
-boxplot2(pgs_Human_proteome_long, main="Human proteome (proteins)",lab1='DIA-NN',lab2='MS-BERT',ylab1='Number of proteins',ylim1=c(0,10000))
+boxplot2(prs_Human_proteome_long, main="Human proteome (precursors)",lab1='DIA-NN',lab2='DIA-BERT',ylab1='Number of precursors',ylim1=c(0,80000))
+boxplot2(pgs_Human_proteome_long, main="Human proteome (proteins)",lab1='DIA-NN',lab2='DIA-BERT',ylab1='Number of proteins',ylim1=c(0,10000))
 dev.off()
 
 
@@ -132,12 +132,12 @@ dev.off()
 T1=data.frame(var=gsub('(.*)_(.*)_(.*)','\\1_\\3',rownames(prs_fas_Human_proteome)), 
               type='DIA-NN', quant=c(prs_fas_Human_proteome$`DIA-NN`))
 T2=data.frame(var=gsub('(.*)_(.*)_(.*)','\\1_\\3',rownames(prs_fas_Human_proteome)), 
-              type='MS-BERT', quant=c(prs_fas_Human_proteome$`MS-BERT`))
+              type='DIA-BERT', quant=c(prs_fas_Human_proteome$`DIA-BERT`))
 prs_fas_Human_proteome_long=rbind(T1,T2)
 cat('ttest for precursor identification comparison with DIA-NN library-free mode\n')
 print(sapply(unique(prs_fas_Human_proteome_long$var),function(x){
   #x=unique(prs_fas_Human_proteome_long$var)[2]
-  t.test(c(prs_fas_Human_proteome_long[prs_fas_Human_proteome_long$var==x & prs_fas_Human_proteome_long$type=='MS-BERT','quant']), 
+  t.test(c(prs_fas_Human_proteome_long[prs_fas_Human_proteome_long$var==x & prs_fas_Human_proteome_long$type=='DIA-BERT','quant']), 
          c(prs_fas_Human_proteome_long[prs_fas_Human_proteome_long$var==x & prs_fas_Human_proteome_long$type=='DIA-NN','quant']),paired = T)$p.value
 }))
 # 2_cervical cancer        3_gallbladder cancer                4_myosarcoma 5_pancreatic adenocarcinoma 
@@ -147,12 +147,12 @@ print(sapply(unique(prs_fas_Human_proteome_long$var),function(x){
 T1=data.frame(var=gsub('(.*)_(.*)_(.*)','\\1_\\3',rownames(pgs_fas_Human_proteome)), 
               type='DIA-NN', quant=c(pgs_fas_Human_proteome$`DIA-NN`))
 T2=data.frame(var=gsub('(.*)_(.*)_(.*)','\\1_\\3',rownames(pgs_fas_Human_proteome)), 
-              type='MS-BERT', quant=c(pgs_fas_Human_proteome$`MS-BERT`))
+              type='DIA-BERT', quant=c(pgs_fas_Human_proteome$`DIA-BERT`))
 pgs_fas_Human_proteome_long=rbind(T1,T2)
 cat('ttest for protein identification comparison with DIA-NN library-free mode\n')
 print(sapply(unique(pgs_fas_Human_proteome_long$var),function(x){
   #x=unique(pgs_fas_Human_proteome_long$var)[2]
-  t.test(c(pgs_fas_Human_proteome_long[pgs_fas_Human_proteome_long$var==x & pgs_fas_Human_proteome_long$type=='MS-BERT','quant']), 
+  t.test(c(pgs_fas_Human_proteome_long[pgs_fas_Human_proteome_long$var==x & pgs_fas_Human_proteome_long$type=='DIA-BERT','quant']), 
          c(pgs_fas_Human_proteome_long[pgs_fas_Human_proteome_long$var==x & pgs_fas_Human_proteome_long$type=='DIA-NN','quant']),paired = T)$p.value
 }))
 #  2_cervical cancer        3_gallbladder cancer                4_myosarcoma 5_pancreatic adenocarcinoma 
@@ -162,8 +162,8 @@ print(sapply(unique(pgs_fas_Human_proteome_long$var),function(x){
 
 #boxplot precursor and protein number for tissue
 pdf('Boxplot precursor and protein number for tissue comparison with DIA-NN library-free mode.pdf', width=5,height = 4)
-boxplot2(prs_fas_Human_proteome_long, main="Human proteome (precursors)",lab1='DIA-NN',lab2='MS-BERT',ylab1='Number of precursors',ylim1=c(0,80000))
-boxplot2(pgs_fas_Human_proteome_long, main="Human proteome (proteins)",lab1='DIA-NN',lab2='MS-BERT',ylab1='Number of proteins',ylim1=c(0,10000))
+boxplot2(prs_fas_Human_proteome_long, main="Human proteome (precursors)",lab1='DIA-NN',lab2='DIA-BERT',ylab1='Number of precursors',ylim1=c(0,80000))
+boxplot2(pgs_fas_Human_proteome_long, main="Human proteome (proteins)",lab1='DIA-NN',lab2='DIA-BERT',ylab1='Number of proteins',ylim1=c(0,10000))
 dev.off()
 
 
@@ -171,21 +171,21 @@ dev.off()
 #DIANN proteome
 DIA_NN_Human_proteome         <- readxl::read_xlsx('DIA_NN_19_lib_proteome.xlsx',sheet = 'Human_proteome')
 DIA_NN_Three_species_proteome <- readxl::read_xlsx('DIA_NN_19_lib_proteome.xlsx',sheet = 'Three_species_proteome')
-#MS_BERT proteome
-MS_BERT_Human_proteome         <- readxl::read_xlsx('MS_BERT_proteome.xlsx',sheet = 'Human_proteome')
-MS_BERT_Three_species_proteome <- readxl::read_xlsx('MS_BERT_proteome.xlsx',sheet = 'Three_species_proteome')
+#DIA_BERT proteome
+DIA_BERT_Human_proteome         <- readxl::read_xlsx('DIA_BERT_proteome.xlsx',sheet = 'Human_proteome')
+DIA_BERT_Three_species_proteome <- readxl::read_xlsx('DIA_BERT_proteome.xlsx',sheet = 'Three_species_proteome')
 
 
 library(VennDiagram)
-###comparison between MS-BERT and DIA-NN
+###comparison between DIA-BERT and DIA-NN
 #Human_proteome precursors
-set1=MS_BERT_Human_proteome$Precursor
+set1=DIA_BERT_Human_proteome$Precursor
 set2=DIA_NN_Human_proteome$Precursor
 set1=set1[set1!='' & !is.na(set1)]; length(unique(set1)) #149926
 set2=set2[set2!='' & !is.na(set2)]; length(unique(set2)) #120130
 venn_Human_proteome_prs <- venn.diagram(
   x = list(set1, set2),
-  category.names = c("MS-BERT", "DIA-NN"),
+  category.names = c("DIA-BERT", "DIA-NN"),
   filename = NULL,  # Don't save the plot to a file, display it directly
   fill = c("#D78B61" , "#8FBFA4"),
   alpha = 0.75,
@@ -194,13 +194,13 @@ venn_Human_proteome_prs <- venn.diagram(
 )
 
 #Human_proteome proteins
-set1=MS_BERT_Human_proteome$Protein_id
+set1=DIA_BERT_Human_proteome$Protein_id
 set2=DIA_NN_Human_proteome$Protein_id
 set1=set1[set1!='' & !is.na(set1)]; length(unique(set1)) #11141
 set2=set2[set2!='' & !is.na(set2)]; length(unique(set2)) #9014
 venn_Human_proteome_pgs <- venn.diagram(
   x = list(set1, set2),
-  category.names = c("MS-BERT", "DIA-NN"),
+  category.names = c("DIA-BERT", "DIA-NN"),
   filename = NULL,  # Don't save the plot to a file, display it directly
   fill = c("#D78B61" , "#8FBFA4"),
   alpha = 0.75,
@@ -209,6 +209,6 @@ venn_Human_proteome_pgs <- venn.diagram(
 )
 
 #out to pdf
-pdf('Venn plot comparison between MS-BERT and DIA-NN (Human_proteome).pdf', width=6,height = 3)
+pdf('Venn plot comparison between DIA-BERT and DIA-NN (Human_proteome).pdf', width=6,height = 3)
 plot_grid(venn_Human_proteome_prs, venn_Human_proteome_pgs,  nrow = 1)
 dev.off()

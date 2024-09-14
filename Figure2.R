@@ -95,23 +95,23 @@ cclat <- function(data){
   cat('\nCVs:','\n',CV1,'\n',CV2,'\nmedian of CV', '\n',median(c(CV1, CV2)))
   cat('\nHUMAN: ',HUMAN, '\nYEAST: ',YEAST, '\nCAEEL: ',CAEEL,'\n')
 }
-path='D:/LZW/Guomics/MS-BERT/Benchmark/fdrs_DIANN19/MS_BERT'
+path='D:/LZW/Guomics/DIA-BERT/Benchmark/fdrs_DIANN19/DIA_BERT'
 setwd(path)
 
 ###HYC set
-#MS-BERT 
+#DIA-BERT 
 dataset='HYC_GUI'
-pathMS_BERT_HYC_GUI=paste0(path, '/', dataset)
-prs1_ori_HYC_GUI <- read.table('D:/LZW/Guomics/MS-BERT/Benchmark/MaxLFQ/model_astral0_decoy_240705/res_240705/prs6_TIC_RT_dependent_occupancynormal.tsv', sep='\t',header = T)
+pathDIA_BERT_HYC_GUI=paste0(path, '/', dataset)
+prs1_ori_HYC_GUI <- read.table('D:/LZW/Guomics/DIA-BERT/Benchmark/MaxLFQ/model_astral0_decoy_240705/res_240705/prs6_TIC_RT_dependent_occupancynormal.tsv', sep='\t',header = T)
 prs1_ori_HYC_GUI <- prs1_ori_HYC_GUI[!grepl('_ECOLI',prs1_ori_HYC_GUI$Protein_name), ]
 rownames(prs1_ori_HYC_GUI) <- prs1_ori_HYC_GUI$Precursor
-pgs1_ori_HYC_GUI <- read.table('D:/LZW/Guomics/MS-BERT/Benchmark/MaxLFQ/model_astral0_decoy_240705/res_240705/pgs1_TIC_RT_dependent_MaxLFQ.tsv', sep='\t', header=T)
+pgs1_ori_HYC_GUI <- read.table('D:/LZW/Guomics/DIA-BERT/Benchmark/MaxLFQ/model_astral0_decoy_240705/res_240705/pgs1_TIC_RT_dependent_MaxLFQ.tsv', sep='\t', header=T)
 pgs1_ori_HYC_GUI <- pgs1_ori_HYC_GUI[pgs1_ori_HYC_GUI$Protein!='', ]
 pgs1_ori_HYC_GUI <- pgs1_ori_HYC_GUI[!grepl('_ECOLI',pgs1_ori_HYC_GUI$Protein_name), ]
 rownames(pgs1_ori_HYC_GUI) <- pgs1_ori_HYC_GUI$Protein
 pgs1_ori_HYC_GUI[pgs1_ori_HYC_GUI==0]=NA
 
-###MS-BERT 
+###DIA-BERT 
 #prs
 cclat(prs1_ori_HYC_GUI)
 #pgs
@@ -119,16 +119,16 @@ cclat(pgs1_ori_HYC_GUI)
 #
 LFQPlot_sper(data=pgs1_ori_HYC_GUI,title='',type='HYC', pdf1=paste0('..','/pgs1_ori_HYC_GUI'),xlim1=14,xlim2=33) ###
 LFQPlot_sper(data=prs1_ori_HYC_GUI,title='',type='HYC', pdf1=paste0('..','/prs1_ori_HYC_GUI'),xlim1=14,xlim2=33) ###
-pdf('D:/LZW/Guomics/MS-BERT/Benchmark/fdrs_DIANN19/Boxplot_HYC_MS_BERT.pdf', width = 5, height = 5)
-LFQbox(data=prs1_ori_HYC_GUI,title='MS_BERT_prs',type='HYC', c(-5, 5))
-LFQbox(data=pgs1_ori_HYC_GUI,title='MS_BERT_pgs',type='HYC', c(-5, 5))
+pdf('D:/LZW/Guomics/DIA-BERT/Benchmark/fdrs_DIANN19/Boxplot_HYC_DIA_BERT.pdf', width = 5, height = 5)
+LFQbox(data=prs1_ori_HYC_GUI,title='DIA_BERT_prs',type='HYC', c(-5, 5))
+LFQbox(data=pgs1_ori_HYC_GUI,title='DIA_BERT_pgs',type='HYC', c(-5, 5))
 dev.off()
 
 #DIANN set for comparison
-DIANN_prs_HYC_GUI <- read.csv('D:/LZW/Guomics/MS-BERT/Benchmark/fdrs_DIANN19/DIA_NN_19_lib/HYC_GUI_lib_combine_report.pr_matrix.tsv',sep='\t',header=T)
+DIANN_prs_HYC_GUI <- read.csv('D:/LZW/Guomics/DIA-BERT/Benchmark/fdrs_DIANN19/DIA_NN_19_lib/HYC_GUI_lib_combine_report.pr_matrix.tsv',sep='\t',header=T)
 rownames(DIANN_prs_HYC_GUI) <- DIANN_prs_HYC_GUI$Precursor.Id
 DIANN_prs_HYC_GUI1 <- cbind(Protein_name=DIANN_prs_HYC_GUI$Protein.Names, DIANN_prs_HYC_GUI)
-DIANN_pgs_HYC_GUI <- read.csv('D:/LZW/Guomics/MS-BERT/Benchmark/fdrs_DIANN19/DIA_NN_19_lib/HYC_GUI_lib_combine_report.pg_matrix.tsv',sep='\t',header=T)
+DIANN_pgs_HYC_GUI <- read.csv('D:/LZW/Guomics/DIA-BERT/Benchmark/fdrs_DIANN19/DIA_NN_19_lib/HYC_GUI_lib_combine_report.pg_matrix.tsv',sep='\t',header=T)
 rownames(DIANN_pgs_HYC_GUI) <- DIANN_pgs_HYC_GUI$Protein.Group
 DIANN_pgs_HYC_GUI1 <- cbind(Protein_name=DIANN_pgs_HYC_GUI$Protein.Names, DIANN_pgs_HYC_GUI)
 
@@ -137,9 +137,9 @@ cclat(DIANN_prs_HYC_GUI1)
 cclat(DIANN_pgs_HYC_GUI1)
 
 ###plot for DIANN 
-LFQPlot_sper(data=DIANN_prs_HYC_GUI1,title='',type='HYC', pdf1=paste0(pathMS_BERT_HYC_GUI,'DIANN_prs_HYC_GUI1'),xlim1=14,xlim2=33)
-LFQPlot_sper(data=DIANN_pgs_HYC_GUI1,title='',type='HYC', pdf1=paste0(pathMS_BERT_HYC_GUI,'DIANN_pgs_HYC_GUI1'),xlim1=14,xlim2=33)
-pdf('D:/LZW/Guomics/MS-BERT/Benchmark/fdrs_DIANN19/Boxplot_HYC_DIANN.pdf', width = 5, height = 5)
+LFQPlot_sper(data=DIANN_prs_HYC_GUI1,title='',type='HYC', pdf1=paste0(pathDIA_BERT_HYC_GUI,'DIANN_prs_HYC_GUI1'),xlim1=14,xlim2=33)
+LFQPlot_sper(data=DIANN_pgs_HYC_GUI1,title='',type='HYC', pdf1=paste0(pathDIA_BERT_HYC_GUI,'DIANN_pgs_HYC_GUI1'),xlim1=14,xlim2=33)
+pdf('D:/LZW/Guomics/DIA-BERT/Benchmark/fdrs_DIANN19/Boxplot_HYC_DIANN.pdf', width = 5, height = 5)
 LFQbox(data=DIANN_prs_HYC_GUI1,title='DIANN_prs',type='HYC', c(-5, 5))
 LFQbox(data=DIANN_pgs_HYC_GUI1,title='DIANN_pgs',type='HYC', c(-5, 5))
 dev.off()

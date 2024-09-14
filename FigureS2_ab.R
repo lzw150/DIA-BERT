@@ -1,4 +1,4 @@
-setwd('D:/LZW/Guomics/MS-BERT/Benchmark/fdrs_DIANN19/')
+setwd('D:/LZW/Guomics/DIA-BERT/Benchmark/fdrs_DIANN19/')
 library('cowplot')
 pgs=read.csv('pgs.csv',row.names = 1)
 colnames(pgs)=gsub('\\.','-',colnames(pgs))
@@ -7,14 +7,14 @@ rownames(prs)=prs$Files
 prs=prs[rownames(pgs),]
 
 #pgs_Three_species_proteome
-pgs_Three_species_proteome=pgs[1:6,c('DIA-NN', 'MS-BERT')]
+pgs_Three_species_proteome=pgs[1:6,c('DIA-NN', 'DIA-BERT')]
 rownames(pgs_Three_species_proteome)=paste0(rep(c('Three_species_proteome_'),each=6),c(1:6))
 #Boxplot
 lim2 <- 1.2*max(pgs_Three_species_proteome,na.rm=T)
 pgs_Three_species_proteome_barplot <- barplot(t(pgs_Three_species_proteome) , beside=T , las=2, legend.text=T,col=c("#8FBFA4", "#D78B61") , ylim=c(0,lim2) , ylab="Number of proteins")
 
 #prs_Three_species_proteome
-prs_Three_species_proteome=prs[1:6,c('DIA-NN', 'MS-BERT')]
+prs_Three_species_proteome=prs[1:6,c('DIA-NN', 'DIA-BERT')]
 rownames(prs_Three_species_proteome)=paste0(rep(c('Three_species_proteome_'),each=6),c(1:6))
 #Boxplot
 lim4 <- 1.2*max(prs_Three_species_proteome,na.rm=T)
@@ -70,11 +70,11 @@ boxplot2 <- function(data,main,lab1="Common",lab2="Unique",ylab1="Log2intensity"
 
 #precursor and protein number for three species
 T1=data.frame(var='Precursor', 
-              type='MS-BERT', quant=c(prs_Three_species_proteome$`MS-BERT`))
+              type='DIA-BERT', quant=c(prs_Three_species_proteome$`DIA-BERT`))
 T2=data.frame(var='Precursor', 
               type='DIA-NN', quant=c(prs_Three_species_proteome$`DIA-NN`))
 T3=data.frame(var='Protein', 
-              type='MS-BERT', quant=c(pgs_Three_species_proteome$`MS-BERT`))
+              type='DIA-BERT', quant=c(pgs_Three_species_proteome$`DIA-BERT`))
 T4=data.frame(var='Protein', 
               type='DIA-NN', quant=c(pgs_Three_species_proteome$`DIA-NN`))
 prgs_Three_species_proteome_long=rbind(T1,T2,T3,T4)
@@ -83,35 +83,35 @@ pgs_Three_species_proteome_long=rbind(T3,T4)
 cat('ttest for Three_species_proteome precursor and protein quant comparison\n')
 print(sapply(unique(prgs_Three_species_proteome_long$var),function(x){
   #x=unique(prgs_Three_species_proteome_long$var)[2]
-  t.test(c(prgs_Three_species_proteome_long[prgs_Three_species_proteome_long$var==x & prgs_Three_species_proteome_long$type=='MS-BERT','quant']), 
+  t.test(c(prgs_Three_species_proteome_long[prgs_Three_species_proteome_long$var==x & prgs_Three_species_proteome_long$type=='DIA-BERT','quant']), 
          c(prgs_Three_species_proteome_long[prgs_Three_species_proteome_long$var==x & prgs_Three_species_proteome_long$type=='DIA-NN','quant']),paired = T)$p.value
 }))
 #  Precursor      Protein 
 # 1.356084e-07 1.393667e-05 
 #boxplot precursor and protein number for three species
 pdf('Boxplot precursor and protein number for three species.pdf', width=3,height = 3)
-boxplot2(prs_Three_species_proteome_long, main="Three_species proteome (precursors)",lab1='DIA-NN',lab2='MS-BERT',ylab1='Number of precursors')
-boxplot2(pgs_Three_species_proteome_long, main="Three_species proteome (proteins)",lab1='DIA-NN',lab2='MS-BERT',ylab1='Number of proteins')
+boxplot2(prs_Three_species_proteome_long, main="Three_species proteome (precursors)",lab1='DIA-NN',lab2='DIA-BERT',ylab1='Number of precursors')
+boxplot2(pgs_Three_species_proteome_long, main="Three_species proteome (proteins)",lab1='DIA-NN',lab2='DIA-BERT',ylab1='Number of proteins')
 dev.off()
 
 
 #DIANN proteome
 DIA_NN_Human_proteome         <- readxl::read_xlsx('DIA_NN_19_lib_proteome.xlsx',sheet = 'Human_proteome')
 DIA_NN_Three_species_proteome <- readxl::read_xlsx('DIA_NN_19_lib_proteome.xlsx',sheet = 'Three_species_proteome')
-#MS_BERT proteome
-MS_BERT_Human_proteome         <- readxl::read_xlsx('MS_BERT_proteome.xlsx',sheet = 'Human_proteome')
-MS_BERT_Three_species_proteome <- readxl::read_xlsx('MS_BERT_proteome.xlsx',sheet = 'Three_species_proteome')
+#DIA_BERT proteome
+DIA_BERT_Human_proteome         <- readxl::read_xlsx('DIA_BERT_proteome.xlsx',sheet = 'Human_proteome')
+DIA_BERT_Three_species_proteome <- readxl::read_xlsx('DIA_BERT_proteome.xlsx',sheet = 'Three_species_proteome')
 
 library(VennDiagram)
-###comparison between MS-BERT and DIA-NN
+###comparison between DIA-BERT and DIA-NN
 #Three_species_proteome precursors
-set1=MS_BERT_Three_species_proteome$Precursor
+set1=DIA_BERT_Three_species_proteome$Precursor
 set2=DIA_NN_Three_species_proteome$Precursor
 set1=set1[set1!='' & !is.na(set1)]; length(unique(set1)) #157179
 set2=set2[set2!='' & !is.na(set2)]; length(unique(set2)) #129803
 venn_Three_species_proteome_prs <- venn.diagram(
   x = list(set1, set2),
-  category.names = c("MS-BERT", "DIA-NN"),
+  category.names = c("DIA-BERT", "DIA-NN"),
   filename = NULL,  # Don't save the plot to a file, display it directly
   fill = c("#D78B61" , "#8FBFA4"),
   alpha = 0.75,
@@ -120,13 +120,13 @@ venn_Three_species_proteome_prs <- venn.diagram(
 )
 
 #Three_species_proteome proteins
-set1=MS_BERT_Three_species_proteome$Protein_id
+set1=DIA_BERT_Three_species_proteome$Protein_id
 set2=DIA_NN_Three_species_proteome$Protein_id
 set1=set1[set1!='' & !is.na(set1)]; length(unique(set1)) #11656
 set2=set2[set2!='' & !is.na(set2)]; length(unique(set2)) #10534
 venn_Three_species_proteome_pgs <- venn.diagram(
   x = list(set1, set2),
-  category.names = c("MS-BERT", "DIA-NN"),
+  category.names = c("DIA-BERT", "DIA-NN"),
   filename = NULL,  # Don't save the plot to a file, display it directly
   fill = c("#D78B61" , "#8FBFA4"),
   alpha = 0.75,
@@ -134,7 +134,7 @@ venn_Three_species_proteome_pgs <- venn.diagram(
   main.cex=1.5
 )
 #out to pdf
-pdf('Venn plot comparison between MS-BERT and DIA-NN (Three_species_proteome).pdf', width=6,height = 3)
+pdf('Venn plot comparison between DIA-BERT and DIA-NN (Three_species_proteome).pdf', width=6,height = 3)
 plot_grid(venn_Three_species_proteome_prs, venn_Three_species_proteome_pgs,  nrow = 1)
 dev.off()
 

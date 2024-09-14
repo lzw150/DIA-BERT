@@ -1,19 +1,19 @@
-path="D:/LZW/Guomics/MS-BERT/Benchmark/fdrs_DIANN19/"
+path="D:/LZW/Guomics/DIA-BERT/Benchmark/fdrs_DIANN19/"
 setwd(path)
 
 #DIANN proteome
 DIA_NN_Human_proteome         <- readxl::read_xlsx('DIA_NN_19_lib_proteome.xlsx',sheet = 'Human_proteome')
 DIA_NN_Three_species_proteome <- readxl::read_xlsx('DIA_NN_19_lib_proteome.xlsx',sheet = 'Three_species_proteome')
-#MS_BERT proteome
-MS_BERT_Human_proteome         <- readxl::read_xlsx('MS_BERT_proteome.xlsx',sheet = 'Human_proteome')
-MS_BERT_Three_species_proteome <- readxl::read_xlsx('MS_BERT_proteome.xlsx',sheet = 'Three_species_proteome')
+#DIA_BERT proteome
+DIA_BERT_Human_proteome         <- readxl::read_xlsx('DIA_BERT_proteome.xlsx',sheet = 'Human_proteome')
+DIA_BERT_Three_species_proteome <- readxl::read_xlsx('DIA_BERT_proteome.xlsx',sheet = 'Three_species_proteome')
 
 pgs=read.csv('pgs.csv',row.names = 1)
 
 
 ###summary of number of peptides per protein
 peptides_per_protein <- function(data,Dataset){
-  #data=MS_BERT_Human_proteome; Dataset='Human_tissue'
+  #data=DIA_BERT_Human_proteome; Dataset='Human_tissue'
   rn=unique(data$Protein_id)
   rn=rn[!is.na(rn)]
   cn=c(sort(unique(data$Filename)))
@@ -27,22 +27,22 @@ peptides_per_protein <- function(data,Dataset){
   }
   round(apply(D1,1,mean,na.rm=T),0)
 }
-MS_BERT_summary_count_Human_tissue  <- peptides_per_protein(MS_BERT_Human_proteome, Dataset='Human_tissue') 
+DIA_BERT_summary_count_Human_tissue  <- peptides_per_protein(DIA_BERT_Human_proteome, Dataset='Human_tissue') 
 DIA_NN_summary_count_Human_tissue  <- peptides_per_protein(DIA_NN_Human_proteome, Dataset='Human_tissue') 
-MS_BERT_summary_count_Human_tissue=MS_BERT_summary_count_Human_tissue[!is.na(MS_BERT_summary_count_Human_tissue)]
+DIA_BERT_summary_count_Human_tissue=DIA_BERT_summary_count_Human_tissue[!is.na(DIA_BERT_summary_count_Human_tissue)]
 DIA_NN_summary_count_Human_tissue =DIA_NN_summary_count_Human_tissue[!is.na(DIA_NN_summary_count_Human_tissue)]
 
-MS_BERT_summary_count_Human_tissue[MS_BERT_summary_count_Human_tissue>20]=20
+DIA_BERT_summary_count_Human_tissue[DIA_BERT_summary_count_Human_tissue>20]=20
 DIA_NN_summary_count_Human_tissue[DIA_NN_summary_count_Human_tissue>20]=20
 pdf('Points plot for summary of number of peptides per protein.pdf', width = 8, height = 5)
-plot(table(MS_BERT_summary_count_Human_tissue),col='#D78B61', pch=19, cex=0.5, xlim=c(0,20),type='b',lwd=1, ylab='Numbers', main='Number of precursors per protein',ylim=c(0,4000))#
+plot(table(DIA_BERT_summary_count_Human_tissue),col='#D78B61', pch=19, cex=0.5, xlim=c(0,20),type='b',lwd=1, ylab='Numbers', main='Number of precursors per protein',ylim=c(0,4000))#
 lines(table(DIA_NN_summary_count_Human_tissue),col='#8FBFA4',pch=19, cex=0.5,  xlim=c(0,20),type='b',lwd=1)
 # Add a legend
-legend("topright", legend = c('Human tissue (MS-BERT)', 'Human tissue (DIA-NN)'), 
+legend("topright", legend = c('Human tissue (DIA-BERT)', 'Human tissue (DIA-NN)'), 
        col=c("#D78B61" , "#8FBFA4"),
        pch = '_', bty = "n", pt.cex = 3, cex = 1.2,  horiz = F, inset = c(0.1, 0.1))
 dev.off()
-sum(MS_BERT_summary_count_Human_tissue<10);sum(MS_BERT_summary_count_Human_tissue>=10);#9501;1640
+sum(DIA_BERT_summary_count_Human_tissue<10);sum(DIA_BERT_summary_count_Human_tissue>=10);#9501;1640
 sum(DIA_NN_summary_count_Human_tissue<10);sum(DIA_NN_summary_count_Human_tissue>=10);#7691;1323
 
 
@@ -88,12 +88,12 @@ boxplot2 <- function(data,main,lab1="Common",lab2="Unique",ylab1="Log2intensity"
 }
 
 ##comparison of quantification
-comparison_of_quantification <- function(dataset,filenames,prs_file,pgs_file,rename,type,proteome1,proteome2,pdfwidth=8,subdir='MS_BERT/',softaware='In MS-BERT '){
+comparison_of_quantification <- function(dataset,filenames,prs_file,pgs_file,rename,type,proteome1,proteome2,pdfwidth=8,subdir='DIA_BERT/',softaware='In DIA-BERT '){
   #dataset='Tumor15_IPX0001981000';filenames=rownames(pgs)[-c(1:6)];
-  #prs_file='MS_BERT_precursor1_Tumor15_IPX0001981000.tsv';pgs_file='MS_BERT_protein1_Tumor15_IPX0001981000.tsv';
+  #prs_file='DIA_BERT_precursor1_Tumor15_IPX0001981000.tsv';pgs_file='DIA_BERT_protein1_Tumor15_IPX0001981000.tsv';
   #rename=paste(pgs$rks_id[-c(1:6)],pgs$Disease[-c(1:6)],sep='_');type='Human_tissue';
-  #proteome1=MS_BERT_Human_proteome;proteome2=DIA_NN_Human_proteome
-  #pdfwidth=8;subdir='MS_BERT/';softaware='In MS-BERT '
+  #proteome1=DIA_BERT_Human_proteome;proteome2=DIA_NN_Human_proteome
+  #pdfwidth=8;subdir='DIA_BERT/';softaware='In DIA-BERT '
   cat(dataset,'\n',
       filenames,'\n',
       prs_file,'\n',
@@ -178,14 +178,14 @@ comparison_of_quantification <- function(dataset,filenames,prs_file,pgs_file,ren
   return(list(prs_quant_1_long, pgs_quant__long))
 }
 
-#In MS-BERT
-quant_long_Tumor15_IPX0001981000_MS_BERT         = comparison_of_quantification(dataset='Tumor15_IPX0001981000',filenames=rownames(pgs)[-c(1:6)],
-                                                                prs_file='MS_BERT_precursor1_Tumor15_IPX0001981000.tsv',pgs_file='MS_BERT_protein1_Tumor15_IPX0001981000.tsv',
+#In DIA-BERT
+quant_long_Tumor15_IPX0001981000_DIA_BERT         = comparison_of_quantification(dataset='Tumor15_IPX0001981000',filenames=rownames(pgs)[-c(1:6)],
+                                                                prs_file='DIA_BERT_precursor1_Tumor15_IPX0001981000.tsv',pgs_file='DIA_BERT_protein1_Tumor15_IPX0001981000.tsv',
                                                                 rename=paste(pgs$rks_id[-c(1:6)],pgs$Disease[-c(1:6)],sep='_'),type='Human_tissue',
-                                                                proteome1=MS_BERT_Human_proteome,proteome2=DIA_NN_Human_proteome)
+                                                                proteome1=DIA_BERT_Human_proteome,proteome2=DIA_NN_Human_proteome)
 
 #In DIA-NN
 quant_long_human_DIA_NN         = comparison_of_quantification(dataset='Tumor15_IPX0001981000',filenames=rownames(pgs)[-c(1:6)],
                                                                prs_file='DIA_NN_precursor1_Tumor15_IPX0001981000.tsv',pgs_file='DIA_NN_protein1_Tumor15_IPX0001981000.tsv',
                                                                rename=paste(pgs$rks_id[-c(1:6)],pgs$Disease[-c(1:6)],sep='_'),type='Human_tissue',subdir='DIA_NN_19_lib/',softaware='In DIA-NN ',
-                                                               proteome1=DIA_NN_Human_proteome,proteome2=MS_BERT_Human_proteome)
+                                                               proteome1=DIA_NN_Human_proteome,proteome2=DIA_BERT_Human_proteome)

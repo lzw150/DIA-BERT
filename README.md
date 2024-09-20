@@ -1,7 +1,7 @@
-# MS-BERT
+# DIA-BERT
 
 ## Description
-MS-BERT: a pre-trained model for data-independent acquisition mass spectrometry-based proteomics data analysis
+DIA-BERT: a pre-trained model for data-independent acquisition mass spectrometry-based proteomics data analysis
 
 ## License
 This software is licensed under a custom license that allows personal use but prohibits commercial use. For more details, see the LICENSE file.

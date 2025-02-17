@@ -52,7 +52,7 @@ python main_linux.py
 
 •	Storage: At least 100GB of available hard disk space is recommended.
 
-•	Graphics Card: A 40GB NVIDIA GPU with CUDA support or a V100 32GB GPU is recommended.
+•	Graphics Card: A 40GB NVIDIA GPU with CUDA support or a V100 32GB GPU is recommended. Lower configurations are also supported, but the running speed may be reduced.
 
 ## License
 This software is licensed under a custom license that allows academic use but prohibits commercial use. For more details, see the LICENSE file.

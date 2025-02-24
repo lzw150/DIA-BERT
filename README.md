@@ -7,6 +7,19 @@
 ## Description
 DIA-BERT: a pre-trained model for data-independent acquisition mass spectrometry-based proteomics data analysis
 
+## Supplementary Tables
+The Supplementary Tables can be downloaded from https://drive.google.com/file/d/15H6KRxhotLeU4rQ-_d7A_oRT9R18qGdl/view?usp=drive_link
+
+Supplementary Table 1: Training files and comparison summary of identification between DIA-NN and DIA-BERT 
+
+Supplementary Table 2: Identified peptide precursors and proteins using DIA-NN (in library-based mode) and DIA-BERT 
+
+Supplementary Table 3: Parameters for simulated data by modified Synthedia 
+
+Supplementary Table 4: Quantification of peptide precursors and proteins using DIA-NN (in library-based mode) and DIA-BERT in combined search 
+
+Supplementary Table 5: Comparison of quantification performance on the three-species dataset using DIA-BERT with different quantification models and DIA-NN.
+
 ## Software
 The software and manual can be downloaded from the website https://dia-bert.guomics.com/.
 On Windows systems, download and unzip the zip file. Click on DIA-BERT.exe to run without installation. 
